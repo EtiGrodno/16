@@ -15,11 +15,12 @@
 #
 #Сбарсываем ссылку на файл в репозитории
 
+
+
 def function_info(fn):
     def wrapper(a):
-        if not isinstance(a, (int, str, list, tuple)):
-            raise TypeError('Тип неизвестен')
-        print(f' Указанные данные: {a}, Являютса: {type(a)} ')
+        data_type = type(a).__name__
+        print(f' Указанные данные: {a}, Являютса: {data_type} ')
         return fn(a)
     return wrapper
 
@@ -28,13 +29,15 @@ def examination(x):
     if isinstance(x, tuple):
         return (f" Количество всех строк: {len(x)}")
     elif isinstance(x, list):
-        x = (str("".join(map(str, x))))
-        return (f' Количество букв:{len([i for i in x if str(i).isalpha()])} '
-                f' Количество цифр: {len([i for i in x if str(i).isdigit()])}')
+        return (f' Количество букв:{sum(isinstance(item, str) for item in x)} '
+                f' Количество цифр: {sum(isinstance(item, int) for item in x)}')
     elif isinstance(x, int):
-        return(f" Кол-во нечётных цифр: {len([i for i in str(x) if i in '13579'])}")
+        return(f" Кол-во нечётных цифр: {sum(int(digit) % 2 != 0 for digit in str(x))}")
     elif isinstance(x, str):
-        return (f' Количество букв:{len([i for i in x if str(i).isalpha()])} ')
+        return (f' Количество букв:{sum(1 for char in x if char.isalpha())} ')
+    else:
+        print("Неподходящий тип данных. Введите тип данных соответствующий:tuple,string list, or integer.")
+
 
 print(examination((1,2,3,'a','bc8?',7,8,9)))
 print(examination([1,2,3,'a','bc8?']))
